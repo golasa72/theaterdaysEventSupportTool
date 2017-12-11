@@ -95,14 +95,18 @@
     }
   </script>
   <div class="container">
+    <h1>イベントサポートツール</h1>
+    <p>目標とするイベントポイントを獲得するため、<br>
+    イベント期間中に必要な残り楽曲プレイ回数や、<br>
+    大まかな所要時間を知ることができます。</p>
     <label for="currentPoint">現在の獲得ポイント</label>
     <input type="number" name="currentPoint" class="form-control" id="currentPoint" placeholder="現在の獲得ポイント" min="0" max="5000000">
     <label for="goalPoint">目標ポイント</label>
     <input type="number" name="goalPoint" class="form-control" id="goalPoint" placeholder="目標ポイント" min="0" max="5000000">
     <label for="healthy">元気の上限値</label>
     <input type="number" name="healthy" class="form-control" id="healthy" placeholder="元気の上限値" min="0" max="300">
-    <div class="col-md-12 text-center">
-        <button type="submit" class="btn btn-primary" id="sample" onclick="get();">Enter</button>
+    <div class="text-center">
+        <button type="submit" class="btn btn-primary col-md-6" id="sample" onclick="get();">Enter</button>
     </div>
     <p>あと <span id="normalPlayCount">x</span>回 通常楽曲をプレイする必要があります。</p>
     <p>あと <span id="eventPlayCount">x</span>回 イベント楽曲をプレイする必要があります。</p>
