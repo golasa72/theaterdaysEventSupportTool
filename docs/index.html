@@ -84,11 +84,11 @@
     }
   </script>
     <label for="currentPoint">現在の獲得ポイント</label>
-    <input type="number" name="currentPoint" class="form-control" id="currentPoint" placeholder="現在の獲得ポイント">
+    <input type="number" name="currentPoint" class="form-control" id="currentPoint" placeholder="現在の獲得ポイント" max="5000000">
     <label for="goalPoint">目標ポイント</label>
-    <input type="number" name="goalPoint" class="form-control" id="goalPoint" placeholder="目標ポイント">
+    <input type="number" name="goalPoint" class="form-control" id="goalPoint" placeholder="目標ポイント" max="5000000">
     <label for="healthy">元気の上限値</label>
-    <input type="number" name="healthy" class="form-control" id="healthy" placeholder="元気の上限値">
+    <input type="number" name="healthy" class="form-control" id="healthy" placeholder="元気の上限値" max="300">
     <button type="submit" class="btn btn-primary" id="sample" onClick="get();">Enter</button>
     <br>
     <br>
