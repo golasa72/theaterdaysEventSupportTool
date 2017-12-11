@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ja">
-  <head>
+
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,109 +13,153 @@
     <!-- BootstrapのJS読み込み -->
     <script src="js/bootstrap.bundle.min.js"></script>
     <style type="text/css">
-    label {
-        margin-top: 1em;
-    }
-    button {
-        margin-top: 1rem;
-        margin-bottom: 1rem;
-    }
-    h1 {
-        font-size: 2.5 rem;
-    }
+        label {
+            margin-top: 1em;
+        }
+
+        button {
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 2.5 rem;
+        }
     </style>
-  </head>
-  <body>
-  <script>
-    function getCount(q, r){
-        let count = 0;
-        r == 0 ? count = q : count = q + 1;
-        return count;
-    }
-    
-    function toHms(t) {
-        let hms = "";
-        let h = t / 3600 | 0;
-        let m = t % 3600 / 60 | 0;
-        let s = t % 60;
-        if (h != 0) {
-            hms = h + "時間" + padZero(m) + "分" + padZero(s) + "秒";
-        } else if (m != 0) {
-            hms = m + "分" + padZero(s) + "秒";
-        } else {
-            hms = s + "秒";
+</head>
+
+<body>
+    <script>
+        function getCount(q, r) {
+            let count = 0;
+            r == 0 ? count = q : count = q + 1;
+            return count;
         }
-        return hms;
-        
-        function padZero(v) {
-            if (v < 10) {
-                return "0" + v;
+
+        function toHms(t) {
+            let hms = "";
+            let h = t / 3600 | 0;
+            let m = t % 3600 / 60 | 0;
+            let s = t % 60;
+            if (h != 0) {
+                hms = h + "時間" + padZero(m) + "分" + padZero(s) + "秒";
+            } else if (m != 0) {
+                hms = m + "分" + padZero(s) + "秒";
             } else {
-                return v;
+                hms = s + "秒";
             }
-        }
-    }
-    
-    function get() {
-        const onePlay = 68;
-        const eventPlayCost = 180;
-        const eventPlay = 429;
-        let normalPlayCount = 0;
-        let eventPlayCount = 0;
-        let eventPoint = 0;
-        let jewel = 0;
-        
-        let currentPoint = document.querySelector("#currentPoint").value;
-        let goalPoint = document.querySelector("#goalPoint").value;
-        let healthy = document.querySelector("#healthy").value;
-        if (currentPoint <=5000000 && goalPoint <= 5000000 && healthy <= 300){
-            let remainingPoint = goalPoint - currentPoint + '';
-            while (remainingPoint > 0){
-                eventPoint += onePlay;
-                remainingPoint -= onePlay;
-                if (eventPoint >= eventPlayCost){
-                    eventPoint -= eventPlayCost;
-                    remainingPoint -= eventPlay;
-                    eventPlayCount += 1;    
+            return hms;
+
+            function padZero(v) {
+                if (v < 10) {
+                    return "0" + v;
+                } else {
+                    return v;
                 }
-                normalPlayCount += 1;         
             }
-            let label = document.querySelector("#normalPlayCount");
-            label.innerHTML = normalPlayCount + '';
-            let q = Math.floor(eventPlayCount / 4);
-            let r = eventPlayCount % 4;
-            eventPlayCount = getCount(q, r);
-            let label2 = document.querySelector("#eventPlayCount");
-            label2.innerHTML = eventPlayCount + '';
-            q = Math.floor((normalPlayCount*30) / healthy);
-            r = (normalPlayCount*30) % healthy;
-            jewel = getCount(q, r);
-            let label3 = document.querySelector("#jewel");
-            label3.innerHTML = jewel + '';
-            let sec = normalPlayCount * 113;
-            let label4 = document.querySelector("#time");
-            label4.innerHTML = toHms(sec) + '';
         }
-    }
-  </script>
-  <div class="container">
-    <h1>ミリシタイベントサポートツール</h1>
-    <p>目標とするイベントポイントを獲得するため、イベント期間中に必要な残り楽曲プレイ回数や大まかな所要時間を知ることができます。</p>
-    <label for="currentPoint">現在の獲得ポイント</label>
-    <input type="number" name="currentPoint" class="form-control" id="currentPoint" placeholder="現在の獲得ポイント" min="0" max="5000000">
-    <label for="goalPoint">目標ポイント</label>
-    <input type="number" name="goalPoint" class="form-control" id="goalPoint" placeholder="目標ポイント" min="0" max="5000000">
-    <label for="healthy">元気の上限値</label>
-    <input type="number" name="healthy" class="form-control" id="healthy" placeholder="元気の上限値" min="0" max="300">
-    <div class="text-center">
-        <button type="submit" class="btn btn-primary col-md-6" id="sample" onclick="get();">Enter</button>
+        function addError(str) {
+            const preTag = '<div class="alert　alert-warning" role="alert">';
+            const postTag = '</div>';
+            let element = document.getElementById("errorArea");
+            element.innerHTML = element.innerHTML + preTag + str + postTag;
+        }
+
+        function clearError() {
+            let element = document.getElementById("errorArea");
+            element.innerHTML = "";
+        }
+
+        function validate(value, max, min, name) {
+            if (isNaN(value)) {
+                addError(name + " is NaN");
+                return false;
+            }
+            else if (value > max) {
+                addError(name + "is above max");
+                return false;
+            }
+            else if (value < min) {
+                addError(name + "is under min");
+                return false;
+            }
+            return true;
+        }
+
+        function get() {
+            let currentPoint = document.querySelector("#currentPoint").value;
+            let goalPoint = document.querySelector("#goalPoint").value;
+            let healthy = document.querySelector("#healthy").value;
+
+            let isCurrentPointValid = validate(currentPoint * 1, 500000, 0, "現在の獲得ポイント");
+            let isGoalPointValid = validate(goalPoint * 1, 500000, 0, "目標ポイント");
+            let isHealthyValid = validate(healthy * 1, 300, 1, "元気の上限値");
+
+            if (isCurrentPointValid && isGoalPointValid && isHealthyValid) {
+                clearError();
+                const onePlay = 68;
+                const eventPlayCost = 180;
+                const eventPlay = 429;
+                let normalPlayCount = 0;
+                let eventPlayCount = 0;
+                let eventPoint = 0;
+                let jewel = 0;
+                
+                let remainingPoint = goalPoint - currentPoint + '';
+                while (remainingPoint > 0) {
+                    eventPoint += onePlay;
+                    remainingPoint -= onePlay;
+                    if (eventPoint >= eventPlayCost) {
+                        eventPoint -= eventPlayCost;
+                        remainingPoint -= eventPlay;
+                        eventPlayCount += 1;
+                    }
+                    normalPlayCount += 1;
+                }
+                let label = document.querySelector("#normalPlayCount");
+                label.innerHTML = normalPlayCount + '';
+                let q = Math.floor(eventPlayCount / 4);
+                let r = eventPlayCount % 4;
+                eventPlayCount = getCount(q, r);
+                let label2 = document.querySelector("#eventPlayCount");
+                label2.innerHTML = eventPlayCount + '';
+                q = Math.floor((normalPlayCount * 30) / healthy);
+                r = (normalPlayCount * 30) % healthy;
+                jewel = getCount(q, r);
+                let label3 = document.querySelector("#jewel");
+                label3.innerHTML = jewel + '';
+                let sec = normalPlayCount * 113;
+                let label4 = document.querySelector("#time");
+                label4.innerHTML = toHms(sec) + '';
+            }
+        }
+    </script>
+    <div class="container">
+        <h1>ミリシタイベントサポートツール</h1>
+        <p>目標とするイベントポイントを獲得するため、イベント期間中に必要な残り楽曲プレイ回数や大まかな所要時間を知ることができます。</p>
+        <div class="errorArea">
+        </div>
+        <label for="currentPoint">現在の獲得ポイント</label>
+        <input type="number" name="currentPoint" class="form-control" id="currentPoint" placeholder="現在の獲得ポイント" min="0" max="5000000">
+        <label for="goalPoint">目標ポイント</label>
+        <input type="number" name="goalPoint" class="form-control" id="goalPoint" placeholder="目標ポイント" min="0" max="5000000">
+        <label for="healthy">元気の上限値</label>
+        <input type="number" name="healthy" class="form-control" id="healthy" placeholder="元気の上限値" min="0" max="300">
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary col-md-6" id="sample" onclick="get();">Enter</button>
+        </div>
+        <p>あと
+            <span id="normalPlayCount">x</span>回 通常楽曲をプレイする必要があります。</p>
+        <p>あと
+            <span id="eventPlayCount">x</span>回 イベント楽曲をプレイする必要があります。</p>
+        <p>あと
+            <span id="jewel">x</span>回 石を割る必要があります。</p>
+        <p>掛かる時間: およそ
+            <span id="time">xx時間xx分xx秒</span>
+        </p>
+        <p>※楽曲時間は、Sentimental Venus およそ113秒 を目安にプレイ時間を計測しています。</p>
+        <p>※個人の感想であり使用者全員が記載の時間内で終わることを保証するものではありません。</p>
     </div>
-    <p>あと <span id="normalPlayCount">x</span>回 通常楽曲をプレイする必要があります。</p>
-    <p>あと <span id="eventPlayCount">x</span>回 イベント楽曲をプレイする必要があります。</p>
-    <p>あと <span id="jewel">x</span>回 石を割る必要があります。</p>
-    <p>掛かる時間: およそ <span id="time">xx時間xx分xx秒</span></p>
-    <p>※楽曲時間は、Sentimental Venus およそ113秒 を目安にプレイ時間を計測しています。</p>
-    <p >※個人の感想であり使用者全員が記載の時間内で終わることを保証するものではありません。</p>
-    </div>
-  </body>
+</body>
+
 </html>
