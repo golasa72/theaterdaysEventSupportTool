@@ -1,9 +1,103 @@
-<html>
+<!DOCTYPE html>
+<html lang="ja">
   <head>
-    <title>Sample "Hello, World" Application</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>アイドルマスター ミリオンライブ！ シアターデイズ イベントサポート</title>
+    <!-- BootstrapのCSS読み込み -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- jQuery読み込み -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- BootstrapのJS読み込み -->
+    <script src="js/bootstrap.bundle.min.js"></script>
   </head>
-  <body bgcolor=white>
-    <p>This is the home page for the HelloWorld Web application. </p>
-    <p>To prove that they work, you can execute either of the following links:
+  <body>
+  <script>
+    function getCount(q, r){
+        var count = 0;
+        r == 0 ? count = q : count = q + 1;
+        return count;
+    }
+    
+    function toHms(t) {
+        var hms = "";
+        var h = t / 3600 | 0;
+        var m = t % 3600 / 60 | 0;
+        var s = t % 60;
+        if (h != 0) {
+            hms = h + "時間" + padZero(m) + "分" + padZero(s) + "秒";
+        } else if (m != 0) {
+            hms = m + "分" + padZero(s) + "秒";
+        } else {
+            hms = s + "秒";
+        }
+        return hms;
+        
+        function padZero(v) {
+            if (v < 10) {
+                return "0" + v;
+            } else {
+                return v;
+            }
+        }
+    }
+    
+    function get() {
+        var onePlay = 68;
+        var eventPlayCost = 180;
+        var eventPlay = 429;
+        var normalPlayCount = 0;
+        var eventPlayCount = 0;
+        var eventPoint = 0;
+        var jewel = 0;
+        
+        var currentPoint = document.querySelector("#currentPoint").value;
+        var goalPoint = document.querySelector("#goalPoint").value;
+        var remainingPoint = parseInt(goalPoint, 10) - parseInt(currentPoint, 10) + '';
+        while (remainingPoint >= 0){
+            eventPoint += onePlay;
+            remainingPoint -= onePlay;
+            if (eventPoint >= eventPlayCost){
+                eventPoint -= eventPlayCost;
+                remainingPoint -= eventPlay;
+                eventPlayCount += 1;    
+            }
+            normalPlayCount += 1;         
+        }
+        var label = document.querySelector("#normalPlayCount");
+        label.innerHTML = "あと " + normalPlayCount + '' + "回 通常楽曲をプレイする必要がある。";
+        var q = Math.floor(eventPlayCount / 4);
+        var r = eventPlayCount % 4;
+        eventPlayCount = getCount(q, r);
+        var label2 = document.querySelector("#eventPlayCount");
+        label2.innerHTML = "あと " + eventPlayCount + '' + "回 通常楽曲をプレイする必要がある。";
+        var healthy = document.querySelector("#healthy").value;
+        q = Math.floor((normalPlayCount*30) / healthy);
+        r = (normalPlayCount*30) % healthy;
+        jewel = getCount(q, r);
+        var label3 = document.querySelector("#jewel");
+        label3.innerHTML = "あと " + jewel + '' + "回 通常楽曲をプレイする必要がある。";
+        var sec = normalPlayCount * 113;
+        var label4 = document.querySelector("#time");
+        label4.innerHTML = "掛かる時間: " + toHms(sec) + '';
+    }
+  </script>
+    <label for="currentPoint">現在の獲得ポイント</label>
+    <input type="number" name="currentPoint" class="form-control" id="currentPoint" placeholder="現在の獲得ポイント">
+    <label for="goalPoint">目標ポイント</label>
+    <input type="number" name="goalPoint" class="form-control" id="goalPoint" placeholder="目標ポイント">
+    <label for="healthy">元気の上限値</label>
+    <input type="number" name="healthy" class="form-control" id="healthy" placeholder="元気の上限値">
+    <button type="submit" class="btn btn-primary" id="sample" onClick="get();">Submit</button>
+    <br>
+    <br>
+    <label for="normalPlayCount" id="normalPlayCount">あと x回 通常楽曲をプレイする必要がある。</label>
+    <br>
+    <label for="eventPlayCount" id="eventPlayCount">あと x回 イベント楽曲をプレイする必要がある。</label>
+    <br>
+    <label for="jewel" id="jewel">あと x回 石を割る必要がある。</label>
+    <br>
+    <label for="time" id="time">掛かる時間: </label>    
   </body>
 </html>
