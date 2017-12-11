@@ -2,6 +2,8 @@
 
 好評配信中のアプリ 【アイドルマスター ミリオンライブ！ シアターデイズ】 ゲーム内イベントを補助するツールです。
 
+[https://golasa72.github.io/theaterdaysEventSupportTool/](https://golasa72.github.io/theaterdaysEventSupportTool/)
+
 <img width="480" alt="アプリ画面" src="https://i.imgur.com/JIS6dGz.png">
 
 上図の様に、3つの情報を入力することで残り必要な楽曲プレイ回数やおおよその掛かる時間を知ることができます。
