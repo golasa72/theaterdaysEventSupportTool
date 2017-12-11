@@ -59,7 +59,7 @@
             }
         }
         function addError(str) {
-            const preTag = '<div class="alert　alert-warning" role="alert">';
+            const preTag = '<div class="alert alert-warning" role="alert">';
             const postTag = '</div>';
             let element = document.getElementById("errorArea");
             element.innerHTML = element.innerHTML + preTag + str + postTag;
@@ -71,7 +71,7 @@
         }
 
         function validate(value, max, min, name) {
-            if (isNaN(value)) {
+            if (isNaN(value) || value === "") {
                 addError(name + " is NaN");
                 return false;
             }
@@ -91,12 +91,12 @@
             let goalPoint = document.querySelector("#goalPoint").value;
             let healthy = document.querySelector("#healthy").value;
 
-            let isCurrentPointValid = validate(currentPoint * 1, 500000, 0, "現在の獲得ポイント");
-            let isGoalPointValid = validate(goalPoint * 1, 500000, 0, "目標ポイント");
-            let isHealthyValid = validate(healthy * 1, 300, 1, "元気の上限値");
+            clearError();
+            let isCurrentPointValid = validate(currentPoint, 500000, 0, "現在の獲得ポイント");
+            let isGoalPointValid = validate(goalPoint, 500000, 0, "目標ポイント");
+            let isHealthyValid = validate(healthy, 300, 1, "元気の上限値");
 
             if (isCurrentPointValid && isGoalPointValid && isHealthyValid) {
-                clearError();
                 const onePlay = 68;
                 const eventPlayCost = 180;
                 const eventPlay = 429;
@@ -137,7 +137,7 @@
     <div class="container">
         <h1>ミリシタイベントサポートツール</h1>
         <p>目標とするイベントポイントを獲得するため、イベント期間中に必要な残り楽曲プレイ回数や大まかな所要時間を知ることができます。</p>
-        <div class="errorArea">
+        <div id="errorArea">
         </div>
         <label for="currentPoint">現在の獲得ポイント</label>
         <input type="number" name="currentPoint" class="form-control" id="currentPoint" placeholder="現在の獲得ポイント" min="0" max="5000000">
