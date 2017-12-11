@@ -66,18 +66,18 @@
             normalPlayCount += 1;         
         }
         var label = document.querySelector("#normalPlayCount");
-        label.innerHTML = "あと " + normalPlayCount + '' + "回 通常楽曲をプレイする必要がある。";
+        label.innerHTML = "あと " + normalPlayCount + '' + "回 通常楽曲をプレイする必要があります。";
         var q = Math.floor(eventPlayCount / 4);
         var r = eventPlayCount % 4;
         eventPlayCount = getCount(q, r);
         var label2 = document.querySelector("#eventPlayCount");
-        label2.innerHTML = "あと " + eventPlayCount + '' + "回 通常楽曲をプレイする必要がある。";
+        label2.innerHTML = "あと " + eventPlayCount + '' + "回 イベント楽曲をプレイする必要があります。";
         var healthy = document.querySelector("#healthy").value;
         q = Math.floor((normalPlayCount*30) / healthy);
         r = (normalPlayCount*30) % healthy;
         jewel = getCount(q, r);
         var label3 = document.querySelector("#jewel");
-        label3.innerHTML = "あと " + jewel + '' + "回 通常楽曲をプレイする必要がある。";
+        label3.innerHTML = "あと " + jewel + '' + "回 石を割る必要があります。";
         var sec = normalPlayCount * 113;
         var label4 = document.querySelector("#time");
         label4.innerHTML = "掛かる時間: " + toHms(sec) + '';
@@ -89,14 +89,14 @@
     <input type="number" name="goalPoint" class="form-control" id="goalPoint" placeholder="目標ポイント">
     <label for="healthy">元気の上限値</label>
     <input type="number" name="healthy" class="form-control" id="healthy" placeholder="元気の上限値">
-    <button type="submit" class="btn btn-primary" id="sample" onClick="get();">Submit</button>
+    <button type="submit" class="btn btn-primary" id="sample" onClick="get();">Enter</button>
     <br>
     <br>
-    <label for="normalPlayCount" id="normalPlayCount">あと x回 通常楽曲をプレイする必要がある。</label>
+    <label for="normalPlayCount" id="normalPlayCount">あと x回 通常楽曲をプレイする必要があります。</label>
     <br>
-    <label for="eventPlayCount" id="eventPlayCount">あと x回 イベント楽曲をプレイする必要がある。</label>
+    <label for="eventPlayCount" id="eventPlayCount">あと x回 イベント楽曲をプレイする必要があります。</label>
     <br>
-    <label for="jewel" id="jewel">あと x回 石を割る必要がある。</label>
+    <label for="jewel" id="jewel">あと x回 石を割る必要があります。</label>
     <br>
     <label for="time" id="time">掛かる時間: </label>    
   </body>
