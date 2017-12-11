@@ -56,7 +56,7 @@
         var goalPoint = document.querySelector("#goalPoint").value;
         var healthy = document.querySelector("#healthy").value;
         if (currentPoint <=5000000 && goalPoint <= 5000000 && healthy <= 300){
-            var remainingPoint = parseInt(goalPoint, 10) - parseInt(currentPoint, 10) + '';
+            var remainingPoint = goalPoint - currentPoint + '';
             while (remainingPoint > 0){
                 eventPoint += onePlay;
                 remainingPoint -= onePlay;
