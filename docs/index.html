@@ -106,15 +106,11 @@
                 return false;
             }
             else if (value > max) {
-                if (name == "元気の上限値"){
-                    addError(name + "は上限値(300)以下にしてください。");
-                }else{
-                    addError(name + "は上限値(5000000)以下にしてください。");
-                }
+                addError(name + "は上限値(" + max +")以下にしてください");
                 return false;
             }
             else if (value < min) {
-                addError(name + "は 0以上にしてください。");
+                addError(name + "は" + min +"以上にしてください");
                 return false;
             }
             return true;
