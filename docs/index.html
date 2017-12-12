@@ -170,7 +170,7 @@
                 let label4 = document.querySelector("#time");
                 time = toHms(sec);
                 label4.innerHTML = time + '';
-                var text = "残り\n" + "通常楽曲: " + normalPlayCount + '' + "回\n" + "イベント楽曲: " + eventPlayCount + '' + "回\n" + jewel + '' + "回 ジュエルを使用\n" + "所要時間: およそ" + toHms(sec) + '' + "\nhttps://golasa72.github.io/theaterdaysEventSupportTool/\n#ミリシタ";
+                var text = "イベント 目標ポイントまで 残り\n" + "通常楽曲: " + normalPlayCount + '' + "回\n" + "イベント楽曲: " + eventPlayCount + '' + "回\n" + jewel + '' + "回 ジュエルを使用\n" + "所要時間: およそ" + toHms(sec) + '' + "\nhttps://golasa72.github.io/theaterdaysEventSupportTool/\n#ミリシタ";
                 let element = document.querySelector("#tweet");
                 element.setAttribute('href', "https://twitter.com/intent/tweet?text=" + encodeURIComponent(text));
 
