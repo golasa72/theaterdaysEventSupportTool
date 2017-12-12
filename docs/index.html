@@ -16,12 +16,10 @@
         label {
             margin-top: 1em;
         }
-
         button {
             margin-top: 1rem;
             margin-bottom: 1rem;
         }
-
         h1 {
             font-size: 2.5 rem;
         }
@@ -70,8 +68,6 @@
     </div>
 
     <script>
-
-
         function getCount(q, r) {
             let count = 0;
             r == 0 ? count = q : count = q + 1;
@@ -100,6 +96,7 @@
                 }
             }
         }
+
         function addError(str) {
             const preTag = '<div class="alert alert-warning" role="alert">';
             const postTag = '</div>';
@@ -127,10 +124,6 @@
             }
             return true;
         }
-        let eventPlayCount = 0;
-        let eventPoint = 0;
-        let jewel = 0;
-        let time = 0;
 
         function get() {
             let currentPoint = document.querySelector("#currentPoint").value;
@@ -148,9 +141,10 @@
                 const eventPlayCost = 180;
                 const eventPlay = 429;
                 let normalPlayCount = 0;
-                eventPlayCount = 0;
-                eventPoint = 0;
-                jewel = 0;
+                let eventPlayCount = 0;
+                let eventPoint = 0;
+                let jewel = 0;
+                let time = 0;        
 
                 let remainingPoint = goalPoint - currentPoint + '';
 
@@ -183,7 +177,6 @@
                 var text = "目標とするイベントptまで 残り\n" + "通常楽曲: " + normalPlayCount + '' + "回\n" + "イベント楽曲: " + eventPlayCount + '' + "回\n元気回復のため " + jewel + '' + "回 ジュエルを使用\n" + "所要時間: およそ" + toHms(sec) + '' + "\nhttps://golasa72.github.io/theaterdaysEventSupportTool/\n#ミリシタ";
                 let element = document.querySelector("#tweet");
                 element.setAttribute('href', "https://twitter.com/intent/tweet?text=" + encodeURIComponent(text));
-
             }
         }
     </script>
