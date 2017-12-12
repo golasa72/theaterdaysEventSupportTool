@@ -54,7 +54,7 @@
         <p>所要時間: およそ
             <span id="time">xx時間xx分xx秒</span>
         </p>
-        <a class="btn btn-primary" id="tweet" href="#" role="button">Tweet</a>
+        <a class="btn btn-primary disabled" id="tweet" href="#" role="button">Tweet</a>
         <p>※獲得イベントptはスコアランクSを想定して計算しています。</p>
         <p>※イベント楽曲は、後半戦のポイント4倍を基準に計算しています。</p>
         <p>※所要時間は、以下を基準に所要時間を計測しています。</p>
@@ -176,6 +176,7 @@
                 var text = "目標とするイベントptまで 残り\n" + "通常楽曲: " + normalPlayCount + '' + "回\n" + "イベント楽曲: " + eventPlayCount + '' + "回\n元気回復のため " + jewel + '' + "回 ジュエルを使用\n" + "所要時間: およそ" + toHms(sec) + '' + "\nhttps://golasa72.github.io/theaterdaysEventSupportTool/\n#ミリシタ";
                 let element = document.querySelector("#tweet");
                 element.setAttribute('href', "https://twitter.com/intent/tweet?text=" + encodeURIComponent(text));
+                element.setAttribute('class', 'btn btn-primary');
             }
         }
     </script>
