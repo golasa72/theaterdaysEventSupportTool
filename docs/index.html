@@ -151,7 +151,7 @@
 
             let isCurrentPointValid = validate(currentPoint, 99999999999999999999, 0, "現在の累積イベントpt");
             let isGoalPointValid = validate(goalPoint, 99999999999999999999, 0, "目標イベントpt");
-            let isHealthyValid = validate(healthy, 300, 1, "現在の元気の上限値");
+            let isHealthyValid = validate(healthy, 300, 61, "現在の元気の上限値");
 
             if (isCurrentPointValid && isGoalPointValid && isHealthyValid) {
                 const onePlay = 68;
@@ -165,13 +165,13 @@
 
                 let remainingPoint = goalPoint - currentPoint + '';
 
-                let loopCount = Math.floor(remainingPoint / 10353);
-                remainingPoint = remainingPoint % 10353;
+                let loopCount = Math.floor(remainingPoint/41412);
+                remainingPoint = remainingPoint % 41412;
                 eventPoint = onePlay * loopCount;
                 eventPlayCount = 17 * loopCount;
-                normalPlayCount = 45 * loopCount;
-                eventPoint = normalPlayCount * onePlay - eventPlayCount * eventPlayCost;
-
+                normalPlayCount = 180 * loopCount; 
+                eventPoint = normalPlayCount * onePlay - eventPlayCount * eventPlayCost * 4;
+                
                 while (remainingPoint > 0)
                 {
                     if(remainingPoint <= onePlay)
@@ -179,12 +179,14 @@
                         eventPoint += onePlay;
                         remainingPoint -= onePlay;
                         normalPlayCount++;
+                        console.log('n');
                     }
                     else if(remainingPoint <= eventPlay && eventPoint >= eventPlayCost)
                     {
                         eventPoint -= eventPlayCost;
                         remainingPoint -= eventPlay;
                         eventPlayCount++;
+                        console.log(1);
                     }
                     else if((remainingPoint <= eventPlay * 2 && eventPoint >= eventPlayCost * 2)
                         || (remainingPoint <= eventPlay * 3 && eventPoint >= eventPlayCost * 3))
@@ -192,18 +194,21 @@
                         eventPoint -= eventPlayCost * 2;
                         remainingPoint -= eventPlay * 2;
                         eventPlayCount++;
+                        console.log(2);
                     }
                     else if (eventPoint >= eventPlayCost * 4)
                     {
                         eventPoint -= eventPlayCost * 4;
                         remainingPoint -= eventPlay * 4;
                         eventPlayCount++;
+                        console.log(4);
                     }
                     else
                     {
                         eventPoint += onePlay;
                         remainingPoint -= onePlay;
                         normalPlayCount++;
+                        console.log('n');
                     }
                 }
 
