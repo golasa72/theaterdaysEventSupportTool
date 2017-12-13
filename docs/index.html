@@ -45,9 +45,9 @@
         <div id="errorArea">
         </div>
         <label for="currentPoint">現在の累積イベントpt</label>
-        <input type="number" name="currentPoint" class="form-control" id="currentPoint" placeholder="現在の累積イベントpt" min="0" max="99999999999999999999">
+        <input type="number" name="currentPoint" class="form-control" id="currentPoint" placeholder="現在の累積イベントpt" min="0" max="9007199254740991">
         <label for="goalPoint">目標イベントpt</label>
-        <input type="number" name="goalPoint" class="form-control" id="goalPoint" placeholder="目標イベントpt" min="0" max="99999999999999999999">
+        <input type="number" name="goalPoint" class="form-control" id="goalPoint" placeholder="目標イベントpt" min="0" max="9007199254740991">
         <label for="healthy">現在の元気の上限値</label>
         <input type="number" name="healthy" class="form-control" id="healthy" placeholder="現在の元気の上限値" min="61" max="300">
         <div class="text-center">
@@ -149,8 +149,8 @@
 
             clearError();
 
-            let isCurrentPointValid = validate(currentPoint, 99999999999999999999, 0, "現在の累積イベントpt");
-            let isGoalPointValid = validate(goalPoint, 99999999999999999999, 0, "目標イベントpt");
+            let isCurrentPointValid = validate(currentPoint, Number.MAX_SAFE_INTEGER, 0, "現在の累積イベントpt");
+            let isGoalPointValid = validate(goalPoint, Number.MAX_SAFE_INTEGER, 0, "目標イベントpt");
             let isHealthyValid = validate(healthy, 300, 61, "現在の元気の上限値");
 
             if (isCurrentPointValid && isGoalPointValid && isHealthyValid) {
