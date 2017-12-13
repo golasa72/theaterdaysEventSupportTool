@@ -34,7 +34,7 @@
     <meta name="twitter:site" content="@golasa72" />
     <meta property="og:url" content="https://golasa72.github.io/theaterdaysEventSupportTool/" />
     <meta property="og:title" content="ミリシタ イベントサポートツール" />
-    <meta property="og:description" content="ミリシタイベントで目標イベントpt到達までに必要な「残り楽曲プレイ回数」や「所要時間」を知ることができます。" /> 
+    <meta property="og:description" content="ミリシタイベントで目標イベントpt到達までに必要な「残り楽曲プレイ回数」や「所要時間」を知ることができます。" />
     <meta property="og:image" content="https://i.imgur.com/8P6Va9d.png" />
 </head>
 
@@ -45,11 +45,11 @@
         <div id="errorArea">
         </div>
         <label for="currentPoint">現在の累積イベントpt</label>
-        <input type="number" name="currentPoint" class="form-control" id="currentPoint" placeholder="現在の累積イベントpt" min="0" max="5000000">
+        <input type="number" name="currentPoint" class="form-control" id="currentPoint" placeholder="現在の累積イベントpt" min="0" max="99999999999999999999">
         <label for="goalPoint">目標イベントpt</label>
-        <input type="number" name="goalPoint" class="form-control" id="goalPoint" placeholder="目標イベントpt" min="0" max="5000000">
+        <input type="number" name="goalPoint" class="form-control" id="goalPoint" placeholder="目標イベントpt" min="0" max="99999999999999999999">
         <label for="healthy">現在の元気の上限値</label>
-        <input type="number" name="healthy" class="form-control" id="healthy" placeholder="現在の元気の上限値" min="0" max="300">
+        <input type="number" name="healthy" class="form-control" id="healthy" placeholder="現在の元気の上限値" min="61" max="300">
         <div class="text-center">
             <button type="submit" class="btn btn-primary col-md-6" id="sample" onclick="get();">Enter</button>
         </div>
@@ -65,7 +65,7 @@
         </p>
         <a class="btn btn-primary disabled" id="tweet" href="#" role="button">Tweet</a>
         <p>※獲得イベントptはスコアランクSを想定して計算しています。</p>
-        <p>※イベント楽曲は、後半戦のポイント4倍を基準に計算しています。</p>
+        <p>※イベント楽曲は、イベント後半戦のイベントpt4倍消費を基準に計算しています。</p>
         <p>※所要時間は、以下を基準に所要時間を計測しています。</p>
         <ul>
             <li>通常楽曲の演奏時間:「Sentimental Venus(1分52秒)」</li>
@@ -76,18 +76,27 @@
     </div>
 
     <script>
-        function getCount(q, r) {
-            let count = 0;
-            r == 0 ? count = q : count = q + 1;
-            return count;
-        }
-
         function toHms(t) {
             let hms = "";
-            let h = t / 3600 | 0;
-            let m = t % 3600 / 60 | 0;
-            let s = t % 60;
-            if (h != 0) {
+            let y = Math.floor(t / 31536000);
+            let d = Math.floor(t % 31536000 / 86400);
+            let h = Math.floor(t % 31536000 % 86400 / 3600);
+            let m = Math.floor(t % 3600 / 60);
+            let s = Math.floor(t % 60);
+
+            var keta = ['万', '億', '兆', '京'];
+            var nums = String(y).replace(/(\d)(?=(\d\d\d\d)+$)/g, "$1,").split(",").reverse();
+            var data = '';
+            for (var i = 0; i < nums.length; i++) {
+                if (!nums[i].match(/^[0]+$/)) {
+                    data = nums[i].replace(/^[0]+/g, "") + keta[i] + data;
+                }
+            }
+            if (y != 0) {
+                hms = data + "年" + padZero(d) + "日" + padZero(h) + "時間" + padZero(m) + "分" + padZero(s) + "秒";
+            } else if (d != 0) {
+                hms = d + "日" + padZero(h) + "時間" + padZero(m) + "分" + padZero(s) + "秒";
+            } else if (h != 0) {
                 hms = h + "時間" + padZero(m) + "分" + padZero(s) + "秒";
             } else if (m != 0) {
                 hms = m + "分" + padZero(s) + "秒";
@@ -140,8 +149,8 @@
 
             clearError();
 
-            let isCurrentPointValid = validate(currentPoint, 500000, 0, "現在の累積イベントpt");
-            let isGoalPointValid = validate(goalPoint, 500000, 0, "目標イベントpt");
+            let isCurrentPointValid = validate(currentPoint, 99999999999999999999, 0, "現在の累積イベントpt");
+            let isGoalPointValid = validate(goalPoint, 99999999999999999999, 0, "目標イベントpt");
             let isHealthyValid = validate(healthy, 300, 1, "現在の元気の上限値");
 
             if (isCurrentPointValid && isGoalPointValid && isHealthyValid) {
@@ -156,26 +165,38 @@
 
                 let remainingPoint = goalPoint - currentPoint + '';
 
+                let loopCount = Math.floor(remainingPoint / 10353);
+                remainingPoint = remainingPoint % 10353;
+                eventPoint = onePlay * loopCount;
+                eventPlayCount = 17 * loopCount;
+                normalPlayCount = 45 * loopCount;
+                eventPoint = normalPlayCount * onePlay - eventPlayCount * eventPlayCost;
+
                 while (remainingPoint > 0) {
-                    eventPoint += onePlay;
-                    remainingPoint -= onePlay;
                     if (eventPoint >= eventPlayCost) {
                         eventPoint -= eventPlayCost;
                         remainingPoint -= eventPlay;
                         eventPlayCount += 1;
+                    } else {
+                        eventPoint += onePlay;
+                        remainingPoint -= onePlay;
+                        normalPlayCount += 1;
                     }
-                    normalPlayCount += 1;
                 }
+
                 let label = document.querySelector("#normalPlayCount");
                 label.innerHTML = normalPlayCount + '';
+
                 let q = Math.floor(eventPlayCount / 4);
                 let r = eventPlayCount % 4;
-                eventPlayCount = getCount(q, r);
+                eventPlayCount = q;
+                if (r != 0) {
+                    eventPlayCount += r == 3 ? 2 : 1;
+                }
                 let label2 = document.querySelector("#eventPlayCount");
                 label2.innerHTML = eventPlayCount + '';
-                q = Math.floor((normalPlayCount * 30) / healthy);
-                r = (normalPlayCount * 30) % healthy;
-                jewel = getCount(q, r);
+
+                jewel = Math.ceil((normalPlayCount * 30) / healthy);
                 let label3 = document.querySelector("#jewel");
                 label3.innerHTML = jewel + '';
                 let sec = (normalPlayCount * 113) + (eventPlayCount * 135) + ((normalPlayCount + eventPlayCount) * 20);
