@@ -172,37 +172,56 @@
                 normalPlayCount = 45 * loopCount;
                 eventPoint = normalPlayCount * onePlay - eventPlayCount * eventPlayCost;
 
-                while (remainingPoint > 0) {
-                    if (eventPoint >= eventPlayCost) {
-                        eventPoint -= eventPlayCost;
-                        remainingPoint -= eventPlay;
-                        eventPlayCount += 1;
-                    } else {
+                while (remainingPoint > 0)
+                {
+                    if(remainingPoint <= onePlay)
+                    {
                         eventPoint += onePlay;
                         remainingPoint -= onePlay;
-                        normalPlayCount += 1;
+                        normalPlayCount++;
+                    }
+                    else if(remainingPoint <= eventPlay && eventPoint >= eventPlayCost)
+                    {
+                        eventPoint -= eventPlayCost;
+                        remainingPoint -= eventPlay;
+                        eventPlayCount++;
+                    }
+                    else if((remainingPoint <= eventPlay * 2 && eventPoint >= eventPlayCost * 2)
+                        || (remainingPoint <= eventPlay * 3 && eventPoint >= eventPlayCost * 3))
+                    {
+                        eventPoint -= eventPlayCost * 2;
+                        remainingPoint -= eventPlay * 2;
+                        eventPlayCount++;
+                    }
+                    else if (eventPoint >= eventPlayCost * 4)
+                    {
+                        eventPoint -= eventPlayCost * 4;
+                        remainingPoint -= eventPlay * 4;
+                        eventPlayCount++;
+                    }
+                    else
+                    {
+                        eventPoint += onePlay;
+                        remainingPoint -= onePlay;
+                        normalPlayCount++;
                     }
                 }
 
                 let label = document.querySelector("#normalPlayCount");
                 label.innerHTML = normalPlayCount + '';
 
-                let q = Math.floor(eventPlayCount / 4);
-                let r = eventPlayCount % 4;
-                eventPlayCount = q;
-                if (r != 0) {
-                    eventPlayCount += r == 3 ? 2 : 1;
-                }
                 let label2 = document.querySelector("#eventPlayCount");
                 label2.innerHTML = eventPlayCount + '';
 
                 jewel = Math.ceil((normalPlayCount * 30) / healthy);
                 let label3 = document.querySelector("#jewel");
                 label3.innerHTML = jewel + '';
+
                 let sec = (normalPlayCount * 113) + (eventPlayCount * 135) + ((normalPlayCount + eventPlayCount) * 20);
                 let label4 = document.querySelector("#time");
                 time = toHms(sec);
                 label4.innerHTML = time + '';
+                
                 var text = "目標とするイベントptまで 残り\n" + "通常楽曲: " + normalPlayCount + '' + "回\n" + "イベント楽曲: " + eventPlayCount + '' + "回\n元気回復のため " + jewel + '' + "回 ジュエルを使用\n" + "所要時間: およそ" + toHms(sec) + '' + "\nhttps://golasa72.github.io/theaterdaysEventSupportTool/\n#ミリシタ";
                 let element = document.querySelector("#tweet");
                 element.setAttribute('href', "https://twitter.com/intent/tweet?text=" + encodeURIComponent(text));
