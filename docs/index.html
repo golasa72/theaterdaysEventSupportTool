@@ -217,11 +217,11 @@
                 let progressFor5times = 0;
                 let remainingPoint = goalPoint - currentPoint + '';
 
-                let loopCount = Math.floor(remainingPoint / 30480);//7620 1 loop
-                remainingPoint = remainingPoint % 30480;
-                normalPlayCount = 40 * loopCount;
+                let loopCount = Math.floor(remainingPoint / 22860);
+                remainingPoint = remainingPoint % 22860;
+                normalPlayCount = 30 * loopCount;
                 eventPlayCount = 3 * loopCount;
-                progress = normalPlayCount * 6 - eventPlayCount * eventPlayCost * 4;
+                progress = normalPlayCount * 6 - eventPlayCount * eventPlayCost * 3;
 
                 while (remainingPoint > 0) {
                     if (progressFor5times >= 40) {
@@ -245,8 +245,7 @@
                             eventPlay4timesCount++;
                         }
                     }
-                    else if (((remainingPoint <= eventPlay * 2 || remainingPoint <= eventPlay4times * 2) && progress >= eventPlayCost * 2)
-                        || ((remainingPoint <= eventPlay * 3 || remainingPoint <= eventPlay4times * 3) && progress >= eventPlayCost * 3)) {
+                    else if (((remainingPoint <= eventPlay * 2 || remainingPoint <= eventPlay4times * 2) && progress >= eventPlayCost * 2)) {
                         progress -= eventPlayCost * 2;
                         if (can5times) {
                             remainingPoint -= eventPlay * 2;
@@ -258,15 +257,15 @@
                             eventPlay4timesCount++;
                         }
                     }
-                    else if (progress >= eventPlayCost * 4) {
-                        progress -= eventPlayCost * 4;
+                    else if (progress >= eventPlayCost * 3) {
+                        progress -= eventPlayCost * 3;
                         if (can5times) {
-                            remainingPoint -= eventPlay * 4;
+                            remainingPoint -= eventPlay * 3;
                             can5times = false;
                             progressFor5times = 0;
                             eventPlayCount++;
                         } else {
-                            remainingPoint -= eventPlay4times * 4;
+                            remainingPoint -= eventPlay4times * 3;
                             eventPlay4timesCount++;
                         }
                     }
