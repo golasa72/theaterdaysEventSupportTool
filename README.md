@@ -31,7 +31,7 @@
 
 * プラチナスターツアーの場合
 
-<img width="480" alt="アプリ画面" src="https://i.imgur.com/pehQ9uG.png">
+<img width="480" alt="アプリ画面" src="https://i.imgur.com/NBnkUtl.png">
 
 ## 計算条件
 
