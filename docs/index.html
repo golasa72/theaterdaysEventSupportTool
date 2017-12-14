@@ -20,6 +20,7 @@
         button {
             margin-top: 1rem;
             margin-bottom: 1rem;
+
         }
 
         h1 {
@@ -50,14 +51,31 @@
         <input type="number" name="goalPoint" class="form-control" id="goalPoint" placeholder="目標イベントpt" min="0" max="9007199254740991">
         <label for="healthy">現在の元気の上限値</label>
         <input type="number" name="healthy" class="form-control" id="healthy" placeholder="現在の元気の上限値" min="61" max="300">
+        <div class="form-group">
+            <label for="eventTypeSelection">イベントの種類を選択</label>
+            <div class="radio-inline">
+                <input type="radio" value="1" name="eventType" id="platinumStarTheater">
+                <label for="platinumStarTheater">プラチナスターシアター</label>
+            </div>
+            <div class="radio-inline">
+                <input type="radio" value="2" name="eventType" id="platinumStarTour">
+                <label for="platinumStarTour">プラチナスターツアー</label>
+            </div>
+        </div>
         <div class="text-center">
-            <button type="submit" class="btn btn-primary col-md-6" id="sample" onclick="get();">Enter</button>
+            <button type="submit" class="btn btn-primary col-md-6" onclick="get();">Enter</button>
         </div>
         <p>目標とするイベントptまで 残り</p>
         <p>通常楽曲:
             <span id="normalPlayCount">x</span>回</p>
         <p>イベント楽曲:
             <span id="eventPlayCount">x</span>回</p>
+        <ul>
+            <li>獲得ポイント5.0倍:
+                <span id="eventPlay5timesCount">x</span>回</li>
+            <li>獲得ポイント4.0倍:
+                <span id="eventPlay4timesCount">x</span>回</li>
+        </ul>
         <p>元気回復のため
             <span id="jewel">x</span>回 ジュエルを使用</p>
         <p>所要時間: およそ
@@ -114,6 +132,45 @@
             }
         }
 
+        function get() {
+            let check1 = document.querySelector("#platinumStarTheater").checked;
+            let check2 = document.querySelector("#platinumStarTour").checked;
+
+            if (check1) {
+                getPlatinumStarTheater();
+            }
+            else if (check2) {
+                getPlatinumStarTour();
+            }
+        }
+
+        function updateResultLabel(normalPlayCount, eventPlayCount, eventPlay5timesCount, eventPlay4timesCount, healthy, normalSongTime, eventSongTime, interval) {
+            let label = document.querySelector("#normalPlayCount");
+            label.innerHTML = normalPlayCount + '';
+
+            let label2 = document.querySelector("#eventPlayCount");
+            label2.innerHTML = eventPlayCount + '';
+
+            let label3 = document.querySelector("#eventPlay5timesCount");
+            label3.innerHTML = eventPlay5timesCount + '';
+
+            let label4 = document.querySelector("#eventPlay4timesCount");
+            label4.innerHTML = eventPlay4timesCount + '';
+
+            let jewel = Math.ceil((normalPlayCount * 30) / healthy);
+            let label5 = document.querySelector("#jewel");
+            label5.innerHTML = jewel + '';
+
+            let sec = (normalPlayCount * normalSongTime) + (eventPlayCount * eventSongTime) + ((normalPlayCount + eventPlayCount) * interval);
+            let label6 = document.querySelector("#time");
+            label6.innerHTML = toHms(sec) + '';
+
+            var text = "目標とするイベントptまで 残り\n" + "通常楽曲: " + normalPlayCount + '' + "回\n" + "イベント楽曲: " + eventPlayCount + '' + "回\n元気回復のため " + jewel + '' + "回 ジュエルを使用\n" + "所要時間: およそ" + toHms(sec) + '' + "\nhttps://golasa72.github.io/theaterdaysEventSupportTool/\n#ミリシタ";
+            let element = document.querySelector("#tweet");
+            element.setAttribute('href', "https://twitter.com/intent/tweet?text=" + encodeURIComponent(text));
+            element.setAttribute('class', 'btn btn-primary');
+        }
+
         function addError(str) {
             const preTag = '<div class="alert alert-warning" role="alert">';
             const postTag = '</div>';
@@ -142,7 +199,97 @@
             return true;
         }
 
-        function get() {
+        function getPlatinumStarTour() {
+            let currentPoint = document.querySelector("#currentPoint").value;
+            let goalPoint = document.querySelector("#goalPoint").value;
+            let healthy = document.querySelector("#healthy").value;
+
+            clearError();
+
+            let isCurrentPointValid = validate(currentPoint, Number.MAX_SAFE_INTEGER, 0, "現在の累積イベントpt");
+            let isGoalPointValid = validate(goalPoint, Number.MAX_SAFE_INTEGER, 0, "目標イベントpt");
+            let isHealthyValid = validate(healthy, 300, 61, "現在の元気の上限値");
+
+            if (isCurrentPointValid && isGoalPointValid && isHealthyValid) {
+                const normalPlay = 140;
+                const eventPlay = 720;
+                const eventPlay4times = 576;
+                const eventPlayCost = 20;
+                let progress = 0;
+                let normalPlayCount = 0;
+                let eventPlayCount = 0;
+                let eventPlay4timesCount = 0;
+                let can5times = false;
+                let progressFor5times = 0;
+                let remainingPoint = goalPoint - currentPoint + '';
+
+                let loopCount = Math.floor(remainingPoint / 30480);//7620 1 loop
+                remainingPoint = remainingPoint % 30480;
+                normalPlayCount = 40 * loopCount;
+                eventPlayCount = 3 * loopCount;
+                progress = normalPlayCount * 6 - eventPlayCount * eventPlayCost * 4;
+
+                while (remainingPoint > 0) {
+                    if (progressFor5times >= 40) {
+                        can5times = true;
+                    }
+                    if (remainingPoint <= normalPlay) {
+                        progress += 6;
+                        progressFor5times += 6;
+                        remainingPoint -= normalPlay;
+                        normalPlayCount++;
+                    }
+                    else if ((remainingPoint <= eventPlay || remainingPoint <= eventPlay4times) && progress >= eventPlayCost) {
+                        progress -= eventPlayCost;
+                        if (can5times) {
+                            remainingPoint -= eventPlay;
+                            can5times = false;
+                            progressFor5times = 0;
+                            eventPlayCount++;
+                        } else {
+                            remainingPoint -= eventPlay4times;
+                            eventPlay4timesCount++;
+                        }
+                    }
+                    else if (((remainingPoint <= eventPlay * 2 || remainingPoint <= eventPlay4times * 2) && progress >= eventPlayCost * 2)
+                        || ((remainingPoint <= eventPlay * 3 || remainingPoint <= eventPlay4times * 3) && progress >= eventPlayCost * 3)) {
+                        progress -= eventPlayCost * 2;
+                        if (can5times) {
+                            remainingPoint -= eventPlay * 2;
+                            can5times = false;
+                            progressFor5times = 0;
+                            eventPlayCount++;
+                        } else {
+                            remainingPoint -= eventPlay4times * 2;
+                            eventPlay4timesCount++;
+                        }
+                    }
+                    else if (progress >= eventPlayCost * 4) {
+                        progress -= eventPlayCost * 4;
+                        if (can5times) {
+                            remainingPoint -= eventPlay * 4;
+                            can5times = false;
+                            progressFor5times = 0;
+                            eventPlayCount++;
+                        } else {
+                            remainingPoint -= eventPlay4times * 4;
+                            eventPlay4timesCount++;
+                        }
+                    }
+                    else {
+                        progress += 6;
+                        progressFor5times += 6;
+                        remainingPoint -= normalPlay;
+                        normalPlayCount++;
+                    }
+                }
+
+                //計算結果を出力
+                updateResultLabel(normalPlayCount, eventPlayCount, eventPlayCount, eventPlay4timesCount, healthy, 131, 135, 20);
+            }
+        }
+
+        function getPlatinumStarTheater() {
             let currentPoint = document.querySelector("#currentPoint").value;
             let goalPoint = document.querySelector("#goalPoint").value;
             let healthy = document.querySelector("#healthy").value;
@@ -160,70 +307,46 @@
                 let normalPlayCount = 0;
                 let eventPlayCount = 0;
                 let eventPoint = 0;
-                let jewel = 0;
 
                 let remainingPoint = goalPoint - currentPoint + '';
 
-                let loopCount = Math.floor(remainingPoint/41412);
+                let loopCount = Math.floor(remainingPoint / 41412);
                 remainingPoint = remainingPoint % 41412;
-                eventPoint = onePlay * loopCount;
                 eventPlayCount = 17 * loopCount;
-                normalPlayCount = 180 * loopCount; 
+                normalPlayCount = 180 * loopCount;
                 eventPoint = normalPlayCount * onePlay - eventPlayCount * eventPlayCost * 4;
-                
-                while (remainingPoint > 0)
-                {
-                    if(remainingPoint <= onePlay)
-                    {
+
+                while (remainingPoint > 0) {
+                    if (remainingPoint <= onePlay) {
                         eventPoint += onePlay;
                         remainingPoint -= onePlay;
                         normalPlayCount++;
                     }
-                    else if(remainingPoint <= eventPlay && eventPoint >= eventPlayCost)
-                    {
+                    else if (remainingPoint <= eventPlay && eventPoint >= eventPlayCost) {
                         eventPoint -= eventPlayCost;
                         remainingPoint -= eventPlay;
                         eventPlayCount++;
                     }
-                    else if((remainingPoint <= eventPlay * 2 && eventPoint >= eventPlayCost * 2)
-                        || (remainingPoint <= eventPlay * 3 && eventPoint >= eventPlayCost * 3))
-                    {
+                    else if ((remainingPoint <= eventPlay * 2 && eventPoint >= eventPlayCost * 2)
+                        || (remainingPoint <= eventPlay * 3 && eventPoint >= eventPlayCost * 3)) {
                         eventPoint -= eventPlayCost * 2;
                         remainingPoint -= eventPlay * 2;
                         eventPlayCount++;
                     }
-                    else if (eventPoint >= eventPlayCost * 4)
-                    {
+                    else if (eventPoint >= eventPlayCost * 4) {
                         eventPoint -= eventPlayCost * 4;
                         remainingPoint -= eventPlay * 4;
                         eventPlayCount++;
                     }
-                    else
-                    {
+                    else {
                         eventPoint += onePlay;
                         remainingPoint -= onePlay;
                         normalPlayCount++;
                     }
                 }
 
-                let label = document.querySelector("#normalPlayCount");
-                label.innerHTML = normalPlayCount + '';
-
-                let label2 = document.querySelector("#eventPlayCount");
-                label2.innerHTML = eventPlayCount + '';
-
-                jewel = Math.ceil((normalPlayCount * 30) / healthy);
-                let label3 = document.querySelector("#jewel");
-                label3.innerHTML = jewel + '';
-
-                let sec = (normalPlayCount * 113) + (eventPlayCount * 135) + ((normalPlayCount + eventPlayCount) * 20);
-                let label4 = document.querySelector("#time");
-                label4.innerHTML = toHms(sec) + '';
-                
-                var text = "目標とするイベントptまで 残り\n" + "通常楽曲: " + normalPlayCount + '' + "回\n" + "イベント楽曲: " + eventPlayCount + '' + "回\n元気回復のため " + jewel + '' + "回 ジュエルを使用\n" + "所要時間: およそ" + toHms(sec) + '' + "\nhttps://golasa72.github.io/theaterdaysEventSupportTool/\n#ミリシタ";
-                let element = document.querySelector("#tweet");
-                element.setAttribute('href', "https://twitter.com/intent/tweet?text=" + encodeURIComponent(text));
-                element.setAttribute('class', 'btn btn-primary');
+                //計算結果を出力
+                updateResultLabel(normalPlayCount, eventPlayCount, 0, 0, healthy, 113, 135, 20);
             }
         }
     </script>
