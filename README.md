@@ -27,11 +27,11 @@
 
 * プラチナスターシアターの場合
 
-<img width="480" alt="アプリ画面" src="https://i.imgur.com/XEdcZhk.png">
+例: <img width="480" alt="アプリ画面" src="https://i.imgur.com/XEdcZhk.png">
 
 * プラチナスターツアーの場合
 
-<img width="480" alt="アプリ画面" src="https://i.imgur.com/A97NeNn.png">
+例: <img width="480" alt="アプリ画面" src="https://i.imgur.com/A97NeNn.png">
 
 ## 計算条件
 
