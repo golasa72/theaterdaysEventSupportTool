@@ -31,7 +31,7 @@
 
 * プラチナスターツアーの場合
 
-例: <img width="480" alt="アプリ画面" src="https://i.imgur.com/A97NeNn.png">
+<img width="480" alt="アプリ画面" src="https://i.imgur.com/A97NeNn.png"  title="プラチナスターツアーの場合">
 
 ## 計算条件
 
