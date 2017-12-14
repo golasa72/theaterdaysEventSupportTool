@@ -25,13 +25,13 @@
 
 残り必要な楽曲プレイ回数やおおよその掛かる時間を知ることができます。
 
-* プラチナスターシアターの場合
+* **プラチナスターシアターの場合**
 
-例: <img width="480" alt="アプリ画面" src="https://i.imgur.com/XEdcZhk.png">
+<img width="480" alt="アプリ画面" src="https://i.imgur.com/XEdcZhk.png">
 
-* プラチナスターツアーの場合
+* **プラチナスターツアーの場合**
 
-<img width="480" alt="アプリ画面" src="https://i.imgur.com/A97NeNn.png"  title="プラチナスターツアーの場合">
+<img width="480" alt="アプリ画面" src="https://i.imgur.com/A97NeNn.png">
 
 ## 計算条件
 
