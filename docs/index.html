@@ -83,11 +83,27 @@
         </p>
         <a class="btn btn-primary disabled" id="tweet" href="#" role="button">Tweet</a>
         <hr>
-        <p>詳しい説明は <a href="https://github.com/golasa72/theaterdaysEventSupportTool/blob/master/README.md">README</a> を御覧ください。</p>
+        <p>詳しい説明は
+            <a href="https://github.com/golasa72/theaterdaysEventSupportTool/blob/master/README.md">README</a> を御覧ください。</p>
         <p>※個人の感想であり使用者全員が記載の時間内で終わることを保証するものではありません。</p>
     </div>
 
     <script>
+        
+        function toJPUnit(num) {
+            var str = new String(num);
+            var n = "";
+            var count = 0;
+            var ptr = 0;
+            var kName = ["万", "億", "兆", "京", "垓", "杼", "穰", "溝", "澗", "正", "載", "極", "恒河沙", "阿僧祇", "那由他", "不可思議", "無量大数"];
+            for (var i = str.length - 1; i >= 0; i--) {
+                n = str.charAt(i) + n;
+                count++;
+                if (((count % 4) == 0) && (i != 0)) n = kName[ptr++] + n;
+            }
+            return n;
+        }
+
         function toHms(t) {
             let time = "";
             let y = Math.floor(t / 31536000);
@@ -96,16 +112,8 @@
             let m = Math.floor(t % 3600 / 60);
             let s = Math.floor(t % 60);
 
-            var keta = ['万', '億', '兆', '京'];
-            var nums = String(y).replace(/(\d)(?=(\d\d\d\d)+$)/g, "$1,").split(",").reverse();
-            var data = '';
-            for (var i = 0; i < nums.length; i++) {
-                if (!nums[i].match(/^[0]+$/)) {
-                    data = nums[i].replace(/^[0]+/g, "") + keta[i] + data;
-                }
-            }
             if (y != 0) {
-                time = data + "年" + padZero(d) + "日" + padZero(h) + "時間" + padZero(m) + "分" + padZero(s) + "秒";
+                time = toJPUnit(y) + "年" + padZero(d) + "日" + padZero(h) + "時間" + padZero(m) + "分" + padZero(s) + "秒";
             } else if (d != 0) {
                 time = d + "日" + padZero(h) + "時間" + padZero(m) + "分" + padZero(s) + "秒";
             } else if (h != 0) {
