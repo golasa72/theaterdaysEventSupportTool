@@ -225,10 +225,10 @@
                 let progressFor5times = 0;
                 let remainingPoint = goalPoint - currentPoint + '';
 
-                let loopCount = Math.floor(remainingPoint / 22860);
-                remainingPoint = remainingPoint % 22860;
-                normalPlayCount = 30 * loopCount;
-                eventPlayCount = 9 * loopCount;
+                let loopCount = Math.floor(remainingPoint / 10680); //1周 6360 22860
+                remainingPoint = remainingPoint % 10680;
+                normalPlayCount = 30 * loopCount; // 10回
+                eventPlayCount = 9 * loopCount;// 3回
                 progress = normalPlayCount * 6 - eventPlayCount * eventPlayCost * 3;
 
                 while (remainingPoint > 0) {
