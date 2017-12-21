@@ -228,7 +228,8 @@
                 let loopCount = Math.floor(remainingPoint / 10680); //1周 6360 22860
                 remainingPoint = remainingPoint % 10680;
                 normalPlayCount = 30 * loopCount; // 10回
-                eventPlayCount = 9 * loopCount;// 3回
+                console.log(remainingPoint);
+                eventPlayCount = 3 * loopCount;// 3回
                 progress = normalPlayCount * 6 - eventPlayCount * eventPlayCost * 3;
 
                 while (remainingPoint > 0) {
