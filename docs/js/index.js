@@ -196,7 +196,7 @@ function getPlatinumStarTour() {
         }
 
         //計算結果を出力
-        updateResultLabel(normalPlayCount, eventPlayCount + eventPlay4timesCount, eventPlayCount, eventPlay4timesCount, healthy, 131, 140, 20);
+        updateResultLabel(normalPlayCount, eventPlayCount + eventPlay4timesCount, eventPlayCount, eventPlay4timesCount, healthy, 131, 140, 70);
     }
 }
 
