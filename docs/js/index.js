@@ -4,7 +4,7 @@ function toJPUnit(num) {
     var n = "";
     var count = 0;
     var ptr = 0;
-    var kName = ["万", "億", "兆", "京"];
+    var kName = ["万", "億"];
     for (var i = str.length - 1; i >= 0; i--) {
         n = str.charAt(i) + n;
         count++;
