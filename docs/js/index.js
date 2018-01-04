@@ -137,7 +137,6 @@ function getPlatinumStarTour() {
         let loopCount = Math.floor(remainingPoint / 10680); //1周 6360 22860
         remainingPoint = remainingPoint % 10680;
         normalPlayCount = 30 * loopCount; // 10回
-        console.log(remainingPoint);
         eventPlayCount = 3 * loopCount;// 3回
         progress = normalPlayCount * 6 - eventPlayCount * eventPlayCost * 3;
 
@@ -212,19 +211,19 @@ function getPlatinumStarTheater() {
     let isHealthyValid = validate(healthy, 300, 61, "現在の元気の上限値");
 
     if (isCurrentPointValid && isGoalPointValid && isHealthyValid) {
-        const onePlay = 68;
+        const onePlay = 85;//before:68 after:85
         const eventPlayCost = 180;
-        const eventPlay = 429;
+        const eventPlay = 537;//before:429 after:537 4倍 = 2148
         let normalPlayCount = 0;
         let eventPlayCount = 0;
-        let eventPoint = 0;
+        let eventPoint = 0; //17 45
 
         let remainingPoint = goalPoint - currentPoint + '';
 
-        let loopCount = Math.floor(remainingPoint / 41412);
-        remainingPoint = remainingPoint % 41412;
+        let loopCount = Math.floor(remainingPoint / 48756);
+        remainingPoint = remainingPoint % 48756;
         eventPlayCount = 17 * loopCount;
-        normalPlayCount = 180 * loopCount;
+        normalPlayCount = 144 * loopCount;
         eventPoint = normalPlayCount * onePlay - eventPlayCount * eventPlayCost * 4;
 
         while (remainingPoint > 0) {
